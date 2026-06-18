@@ -1,9 +1,7 @@
 import csv
 import os
 
-# ==========================================
-# IMPLEMENTASI STRUKTUR DATA 1: QUEUE
-# ==========================================
+#Struktur data: Queue
 class Queue:
     def __init__(self):
         self.items = []
@@ -27,17 +25,16 @@ class Queue:
             self.items.remove(item)
 
 
-# ==========================================
-# KELAS UTAMA: MANAJEMEN RUMAH SAKIT
-# ==========================================
+
+# Manajemen Antrian Rs
 class RumahSakit:
     def __init__(self):
-        # Kunci lokasi file CSV agar selalu 1 folder dengan main.py
+        # agar mengunci file csv (database) agar selalu satu folder dengan antrian.py
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self.file_name = os.path.join(BASE_DIR, 'pasien.csv')
         
         self.antrian = Queue()
-        # IMPLEMENTASI STRUKTUR DATA 2: HASH MAP (Dictionary)
+        # Struktur data: hash map yang berguna sebagai (Dictionary)
         self.data_pasien = {} 
         self.init_csv()
         self.load_data()
@@ -55,7 +52,7 @@ class RumahSakit:
         self.antrian = Queue()
         with open(self.file_name, mode='r') as file:
             reader = csv.reader(file)
-            next(reader)  # Skip header
+            next(reader)  
             for row in reader:
                 if row:
                     id_pasien, nama, umur, keluhan, status = row
@@ -73,7 +70,7 @@ class RumahSakit:
             for id_pasien, detail in self.data_pasien.items():
                 writer.writerow([id_pasien, detail['Nama'], detail['Umur'], detail['Keluhan'], detail['Status']])
 
-    # --- CREATE ---
+    # Create
     def tambah_pasien(self):
         print("\n--- Pendaftaran Pasien Baru ---")
         id_pasien = input("Masukkan ID Pasien (misal: P001): ")
@@ -92,7 +89,7 @@ class RumahSakit:
         self.save_to_csv()
         print(f"Sukses: Pasien {nama} berhasil didaftarkan dan masuk antrean!")
 
-    # --- READ & SORTING ---
+    # read dan sorting ( baca dan mesortingkan nama pasiean)
     def tampilkan_semua_pasien(self):
         print("\n--- Data Seluruh Pasien (Diurutkan Berdasarkan Nama) ---")
         if not self.data_pasien:
@@ -102,7 +99,7 @@ class RumahSakit:
         # Mengambil data dari Hash Map untuk di-Sort
         daftar_pasien = [[k, v['Nama'], v['Umur'], v['Keluhan'], v['Status']] for k, v in self.data_pasien.items()]
         
-        # Implementasi Algoritma SORTING: Bubble Sort
+        # Sorting: Bubble Sort
         n = len(daftar_pasien)
         for i in range(n):
             for j in range(0, n-i-1):
@@ -114,7 +111,7 @@ class RumahSakit:
         for p in daftar_pasien:
             print(f"{p[0]:<10} | {p[1]:<20} | {p[2]:<5} | {p[3]:<20} | {p[4]}")
 
-    # --- SEARCHING ---
+    # Searching (mencari data pasien yang terdaftar)
     def cari_pasien(self):
         print("\n--- Cari Pasien ---")
         id_cari = input("Masukkan ID Pasien yang dicari: ")
@@ -130,7 +127,7 @@ class RumahSakit:
         else:
             print("Peringatan: Data pasien tidak ditemukan.")
 
-    # --- UPDATE ---
+    # Update ( mengperbarui data pasien)
     def ubah_data_pasien(self):
         print("\n--- Ubah Data Pasien ---")
         id_pasien = input("Masukkan ID Pasien yang akan diubah: ")
@@ -150,7 +147,7 @@ class RumahSakit:
         self.save_to_csv()
         print("Sukses: Data pasien berhasil diperbarui!")
 
-    # --- DELETE ---
+    # Menghapus data pasien ketika sudah selesai diperiksa (DELETE)
     def hapus_pasien(self):
         print("\n--- Hapus Data Pasien ---")
         id_pasien = input("Masukkan ID Pasien yang akan dihapus: ")
@@ -162,7 +159,7 @@ class RumahSakit:
         else:
             print("Peringatan: ID Pasien tidak ditemukan!")
 
-    # --- FITUR TAMBAHAN: PROSES QUEUE ---
+    # Proses Queue
     def proses_antrean(self):
         print("\n--- Panggil Pasien Selanjutnya ---")
         if self.antrian.is_empty():
